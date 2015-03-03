@@ -194,7 +194,16 @@ function add_message_headers(message, headers) {
       return message;
   }
 
-  xmlMessage.cnode(headers);
+  var messageHeaders = xmlMessage.getChild('headers');
+  if (messageHeaders) {
+    headers.children.forEach(function(header) {
+      messageHeaders.c(header.name, { name: header.attrs.name }).t(header.children).up();
+    });
+  }
+  else {
+    xmlMessage.cnode(headers);
+  }
+
   return xmlMessage;
 }
 
